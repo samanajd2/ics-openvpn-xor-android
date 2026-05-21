@@ -19,3 +19,5 @@
 [submodule "main/src/main/cpp/fmt"]
 	path = main/src/main/cpp/fmt
 	url = https://github.com/fmtlib/fmt
+[submodule "main/src/main/cpp/openvpn"]
+	url = https://github.com/grizscom/openvpn-xor.git
