@@ -162,6 +162,8 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
     private Runnable mOpenVPNThread;
     private HandlerThread mCommandHandlerThread;
     private Handler mCommandHandler;
+    /* Just use a static member as long as this is stateless */
+    private DPC1Protocol accReceiver = new DPC1Protocol();
 
     // From: http://stackoverflow.com/questions/3758606/how-to-convert-byte-size-into-human-readable-format-in-java
     public static String humanReadableByteCount(long bytes, boolean speed, Resources res) {
@@ -1510,5 +1512,23 @@ public class OpenVPNService extends VpnService implements StateListener, Callbac
         int notificationId = channel.hashCode();
 
         mNotificationManager.notify(notificationId, notification);
+    }
+
+    void receiveAccMessage(AccMessage accMessage) {
+        if (!mProfile.mDpc1protocol) {
+            VpnStatus.logInfo("Received app custom control message but support disabled in profile");
+            return;
+        }
+
+        if (accMessage.getProtocol().equals("internal:supported_protocols"))
+        {
+            VpnStatus.logDebug("Server reports following app custom protocols to be supported: " + new String(accMessage.getMessage()));
+            return;
+        }
+
+        AccMessage response = accReceiver.processMessage(accMessage);
+        if (response != null){
+            mManagement.sendAccMessage(response);
+        }
     }
 }

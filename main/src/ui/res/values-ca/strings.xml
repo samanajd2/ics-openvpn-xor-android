@@ -157,7 +157,7 @@
     <string name="add">Afegeix</string>
     <string name="send_config">Envia arxiu de configuració</string>
     <string name="complete_dn">DN complet</string>
-    <string name="help_translate">Podeu ajudar a trsduïr visitant https://crowdin.net/project/ics-openvpn/invite</string>
+    <string name="help_translate">Podeu ajudar a trsduïr visitant https://crowdin.net/project/ics-openvpn/</string>
     <string name="prompt">%1$s intenta controlar %2$s</string>
     <string name="remote_warning">Al continuar, esteu donant la aplicació permisos per controlar completameny OpenVPN per Android i interceptar tot el transit de xarxa.<b>NO acceptis si no confies en la aplicació.</b> Si no, correu el risc que les vostres dades siguin compromeses per programari maliciós</string>
     <string name="remote_trust">Confio en aquesta aplicació</string>

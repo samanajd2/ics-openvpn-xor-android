@@ -261,7 +261,7 @@
     <string name="rdn">RDN (שם נפוץ)</string>
     <string name="rdn_prefix">קידומת RDN</string>
     <string name="tls_remote_deprecated">tls-remote (לא בשימוש עוד)</string>
-    <string name="help_translate">אתה יכול לעזור בתרגום על ידי ביקור בכתובת https://crowdin.net/project/ics-openvpn/invite</string>
+    <string name="help_translate">אתה יכול לעזור בתרגום על ידי ביקור בכתובת https://crowdin.net/project/ics-openvpn/</string>
     <string name="prompt">%1$s ניסיונות לשלוט ב %2$s</string>
     <string name="remote_warning">אם תמשיך, אתה נותן לאפליקציה הרשאה לשלוט לחלוטין ב-OpenVPN עבור אנדרואיד וליירט את כל תעבורת הרשת.<b>אל תאשר אלא אם כן אתה סומך על הבקשה.</b> אחרת, אתה מסתכן שהנתונים שלך ייפגעו על ידי תוכנה זדונית.\"</string>
     <string name="remote_trust">היישומון הזה מהימן.</string>

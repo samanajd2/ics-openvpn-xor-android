@@ -257,7 +257,7 @@
     <string name="rdn">RDN (algemene naam)</string>
     <string name="rdn_prefix">RDN voorvoegsel</string>
     <string name="tls_remote_deprecated">tls-remote (VEROUDERD)</string>
-    <string name="help_translate">U kunt helpen met vertalen door naar https://crowdin.net/project/ics-openvpn/invite te gaan</string>
+    <string name="help_translate">U kunt helpen met vertalen door naar https://crowdin.net/project/ics-openvpn/ te gaan</string>
     <string name="prompt">%1$s probeert %2$s te beheren</string>
     <string name="remote_warning">Door verder te gaan, geeft u de toepassing toestemming om OpenVPN voor Android volledig te beheren en om alle netwerkverkeer te onderscheppen.<b>NIET accepteren, tenzij u de toepassing vertrouwt.</b> Anders loopt u het risico dat uw gegevens worden aangetast door kwaadaardige software.\"</string>
     <string name="remote_trust">Ik vertrouw deze applicatie.</string>

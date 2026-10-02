@@ -98,7 +98,7 @@ need a contributer's agreement from any contributing party. To get started,
 
 You can help
 ------------
-Even if you are no programmer you can help by translating the OpenVPN client into your native language. [Crowdin provides a free service for non commercial open source projects](https://crowdin.net/project/ics-openvpn/invite) (Fixing/completing existing translations is very welcome as well)
+Even if you are no programmer you can help by translating the OpenVPN client into your native language. [Crowdin provides a free service for non commercial open source projects](https://crowdin.net/project/ics-openvpn/) (Fixing/completing existing translations is very welcome as well)
 
 FAQ
 -----

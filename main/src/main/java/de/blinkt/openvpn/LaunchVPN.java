@@ -317,17 +317,6 @@ public class LaunchVPN extends Activity {
         }
 
         Intent intent = VpnService.prepare(this);
-        // Check if we want to fix /dev/tun
-        SharedPreferences prefs = Preferences.getDefaultSharedPreferences(this);
-        boolean usecm9fix = prefs.getBoolean("useCM9Fix", false);
-        boolean loadTunModule = prefs.getBoolean("loadTunModule", false);
-
-        if (loadTunModule)
-            execeuteSUcmd("insmod /system/lib/modules/tun.ko");
-
-        if (usecm9fix && !mCmfixed) {
-            execeuteSUcmd("chown system /dev/tun");
-        }
 
         if (intent != null) {
             VpnStatus.updateStateString("USER_VPN_PERMISSION", "", R.string.state_user_vpn_permission,

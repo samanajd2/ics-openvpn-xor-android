@@ -24,7 +24,6 @@ import androidx.annotation.Nullable;
 
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Pair;
 
 import de.blinkt.openvpn.core.*;
 
@@ -37,13 +36,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Serial;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.MGF1ParameterSpec;
 import java.security.spec.PSSParameterSpec;
 import java.util.Collection;
@@ -89,7 +88,6 @@ public class VpnProfile implements Serializable, Cloneable {
     public static final int X509_VERIFY_TLSREMOTE_RDN_PREFIX = 4;
     public static final int AUTH_RETRY_NONE_FORGET = 0;
     public static final int AUTH_RETRY_NOINTERACT = 2;
-    public static final boolean mIsOpenVPN22 = false;
     private static final long serialVersionUID = 7085688938959334563L;
     private static final int AUTH_RETRY_NONE_KEEP = 1;
     public static final int AUTH_RETRY_INTERACT = 3;
@@ -180,9 +178,11 @@ public class VpnProfile implements Serializable, Cloneable {
     public boolean mUseLegacyProvider = false;
     public String mTlSCertProfile = "";
     public long mCreationDate = 0;
+    public boolean mDpc1protocol = false;
 
 
-    class ChangeLogEntry implements Serializable {
+    static class ChangeLogEntry implements Serializable {
+        @Serial
         private static final long serialVersionUID = 6032413096860917402L;
 
         public long time;
@@ -414,6 +414,10 @@ public class VpnProfile implements Serializable, Cloneable {
 
             cfg.append(String.format("setenv IV_GUI_VER %s \n", openVpnEscape(getVersionEnvString(context))));
             cfg.append("setenv IV_SSO openurl,webauth,crtext\n");
+            if (mDpc1protocol)
+            {
+                cfg.append("app-custom-control dpc1:flower\n");
+            }
             String versionString = getPlatformVersionEnvString();
             cfg.append(String.format("setenv IV_PLAT_VER %s\n", openVpnEscape(versionString)));
             String hwaddr = NetworkUtils.getFakeMacAddrFromSAAID(context);
@@ -432,8 +436,7 @@ public class VpnProfile implements Serializable, Cloneable {
 
         if (!configForOvpn3) {
             cfg.append("machine-readable-output\n");
-            if (!mIsOpenVPN22)
-                cfg.append("allow-recursive-routing\n");
+            cfg.append("allow-recursive-routing\n");
 
             // Users are confused by warnings that are misleading...
             cfg.append("ifconfig-nowarn\n");
@@ -466,12 +469,7 @@ public class VpnProfile implements Serializable, Cloneable {
             mConnectRetryMaxTime = "300";
 
 
-        if (!mIsOpenVPN22)
-            cfg.append("connect-retry ").append(mConnectRetry).append(" ").append(mConnectRetryMaxTime).append("\n");
-        else if (mIsOpenVPN22 && !mUseUdp)
-            cfg.append("connect-retry ").append(mConnectRetry).append("\n");
-
-
+        cfg.append("connect-retry ").append(mConnectRetry).append(" ").append(mConnectRetryMaxTime).append("\n");
         cfg.append("resolv-retry 60\n");
 
 
@@ -485,7 +483,7 @@ public class VpnProfile implements Serializable, Cloneable {
             cfg.append(mConnections[0].getConnectionBlock(configForOvpn3));
         } else {
             for (Connection conn : mConnections) {
-                canUsePlainRemotes = canUsePlainRemotes && conn.isOnlyRemote();
+                canUsePlainRemotes = canUsePlainRemotes && conn.isOnlyRemote(configForOvpn3);
             }
 
             if (mRemoteRandom)
@@ -498,6 +496,12 @@ public class VpnProfile implements Serializable, Cloneable {
                     }
                 }
             }
+        }
+        if (configForOvpn3 && mConnections.length >= 1){
+            /* OpenVPN 3 also supports proxy options as global config options, use the ones
+             * from the first entry since we refuse generating config if they are not all
+             * identical */
+            cfg.append(mConnections[0].getHttpProxySettings(true));
         }
 
 
@@ -733,8 +737,7 @@ public class VpnProfile implements Serializable, Cloneable {
         if (mPersistTun) {
             cfg.append("persist-tun\n");
             cfg.append("# persist-tun also enables pre resolving to avoid DNS resolve problem\n");
-            if (!mIsOpenVPN22)
-                cfg.append("preresolve\n");
+            cfg.append("preresolve\n");
         }
 
         if (mPushPeerInfo)
@@ -742,7 +745,7 @@ public class VpnProfile implements Serializable, Cloneable {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean usesystemproxy = prefs.getBoolean("usesystemproxy", true);
-        if (usesystemproxy && !mIsOpenVPN22 && !configForOvpn3 && !usesExtraProxyOptions()) {
+        if ((usesystemproxy || usesProxyOptions()) && !configForOvpn3 && !usesExtraProxyOptions()) {
             cfg.append("# Use system proxy setting\n");
             cfg.append("management-query-proxy\n");
         }
@@ -766,7 +769,6 @@ public class VpnProfile implements Serializable, Cloneable {
                 }
             }
         }
-
 
         return cfg.toString();
     }
@@ -864,6 +866,7 @@ public class VpnProfile implements Serializable, Cloneable {
         }
     }
 
+    @NonNull
     @Override
     protected VpnProfile clone() throws CloneNotSupportedException {
         VpnProfile copy = (VpnProfile) super.clone();
@@ -874,6 +877,9 @@ public class VpnProfile implements Serializable, Cloneable {
             copy.mConnections[i++] = conn.clone();
         }
         copy.mAllowedAppsVpn = (HashSet<String>) mAllowedAppsVpn.clone();
+        copy.changesLog = new Vector<>();
+        copy.mVersion = 1;
+        copy.addChangeLogEntry(String.format(Locale.US, "Cloned from profile '%s', uuid '%s'", mName, getUUIDString()));
         return copy;
     }
 
@@ -1018,6 +1024,22 @@ public class VpnProfile implements Serializable, Cloneable {
         return checkProfile(c, doUseOpenVPN3(c));
     }
 
+    private boolean proxySettingsIdentical()
+    {
+        if (mConnections.length <= 1)
+        {
+            return true;
+        }
+
+        String proxy = mConnections[0].getHttpProxySettings(true);
+        for (Connection conn: mConnections)
+        {
+            if (!proxy.equals(conn.getHttpProxySettings(true)))
+                return false;
+        }
+        return true;
+    }
+
     //! Return an error if something is wrong
     public int checkProfile(Context context, boolean useOpenVPN3) {
         if (mAuthenticationType == TYPE_KEYSTORE || mAuthenticationType == TYPE_USERPASS_KEYSTORE || mAuthenticationType == TYPE_EXTERNAL_APP) {
@@ -1094,6 +1116,11 @@ public class VpnProfile implements Serializable, Cloneable {
                         || (mCompatMode > 0 && mCompatMode < 20500)
                         && cipher.equals("BF-CBC"))) {
             return R.string.bf_cbc_requires_legacy;
+        }
+
+        if (!proxySettingsIdentical() && useOpenVPN3)
+        {
+            return R.string.openvpn3_different_proxy;
         }
 
         // Everything okay
@@ -1379,6 +1406,17 @@ public class VpnProfile implements Serializable, Cloneable {
 
         return false;
     }
+
+    private boolean usesProxyOptions() {
+        if (mUseCustomConfig && mCustomConfigOptions != null && mCustomConfigOptions.contains("http-proxy-option "))
+            return true;
+        for (Connection c : mConnections)
+            if (c.usesProxyOptions())
+                return true;
+
+        return false;
+    }
+
 
     /**
      * The order of elements is important!

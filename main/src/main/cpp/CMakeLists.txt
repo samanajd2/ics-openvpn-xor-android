@@ -131,9 +131,12 @@ set(openvpn_srcs
         src/compat/compat-dirname.c
         src/compat/compat-gettimeofday.c
         src/openvpn/argv.c
+        src/openvpn/acc.c
         src/openvpn/auth_token.c
         src/openvpn/base64.c
         src/openvpn/buffer.c
+        src/openvpn/check_file_access.c
+        src/openvpn/check_file_access.h
         src/openvpn/clinat.c
         src/openvpn/console.c
         src/openvpn/console_builtin.c
@@ -173,6 +176,10 @@ set(openvpn_srcs
         src/openvpn/openvpn.c
         src/openvpn/options.c
         src/openvpn/options_parse.c
+        src/openvpn/options_show.c
+        src/openvpn/options_show.h
+        src/openvpn/options_string.c
+        src/openvpn/options_string.h
         src/openvpn/options_util.c
         src/openvpn/otime.c
         src/openvpn/packet_id.c
@@ -195,6 +202,8 @@ set(openvpn_srcs
         src/openvpn/session_id.c
         src/openvpn/shaper.c
         src/openvpn/sig.c
+        src/openvpn/siphash.c
+        src/openvpn/siphash_reference.c
         src/openvpn/socket.c
         src/openvpn/socket_util.c
         src/openvpn/socks.c

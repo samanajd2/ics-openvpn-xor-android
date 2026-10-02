@@ -257,7 +257,7 @@
     <string name="rdn">RDN (පොදු නම)</string>
     <string name="rdn_prefix">RDN උපසර්ගය</string>
     <string name="tls_remote_deprecated">tls-දුරස්ථ (අත් හරින ලද)</string>
-    <string name="help_translate">ඔබට https://crowdin.net/project/ics-openvpn/invite වෙත පිවිසීමෙන් පරිවර්තනයට උදවු කළ හැක</string>
+    <string name="help_translate">ඔබට https://crowdin.net/project/ics-openvpn/ වෙත පිවිසීමෙන් පරිවර්තනයට උදවු කළ හැක</string>
     <string name="prompt">%1$s පාලනය කිරීමට උත්සාහ %2$s</string>
     <string name="remote_warning">ඉදිරියට යාමෙන්, ඔබ Android සඳහා OpenVPN සම්පූර්ණයෙන්ම පාලනය කිරීමට සහ සියලු ජාල තදබදයට බාධා කිරීමට යෙදුමට අවසර ලබා දෙයි.<b>ඔබ යෙදුම විශ්වාස කරන්නේ නම් මිස පිළිගන්න එපා.</b> එසේ නොමැතිනම්, ඔබ ඔබේ දත්ත අනිෂ්ට මෘදුකාංග මගින් අවදානමට ලක්වීමේ අවදානමක් දරයි.\"</string>
     <string name="remote_trust">මම මෙය විශ්වාස කරමි.</string>

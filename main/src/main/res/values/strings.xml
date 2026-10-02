@@ -165,8 +165,6 @@
     <string name="tls_authentication">TLS Authentication/Encryption</string>
     <string name="generated_config">Generated Config</string>
     <string name="generalsettings">Settings</string>
-    <string name="owner_fix_summary">Tries to set the owner of /dev/tun to system. Some CM9 images need this to make the VPNService API work. Requires root.</string>
-    <string name="owner_fix">Fix ownership of /dev/tun</string>
     <string name="generated_config_summary">Shows the generated OpenVPN Configuration File</string>
     <string name="edit_profile_title">Editing \"%s\"</string>
     <string name="building_configration">Building configuration…</string>
@@ -193,8 +191,6 @@
     <string name="ip_add_error">Could not configure IP Address \"%1$s\", rejected by the system: %2$s</string>
     <string name="faq_howto">&lt;p&gt;Get a working config (tested on your computer or download from your provider/organisation)&lt;/p&gt;&lt;p&gt;If it is a single file with no extra pem/pkcs12 files you can send the file yourself and open the attachment. If you have multiple files put them on your sd card.&lt;/p&gt;&lt;p&gt;Click on the email attachment/Use the folder icon in the vpn list to import the config file&lt;/p&gt;&lt;p&gt;If there are errors about missing files put the missing files on your sd card.&lt;/p&gt;&lt;p&gt;Click on the save symbol to add the imported VPN to your VPN list&lt;/p&gt;&lt;p&gt;Connect the VPN by clicking on the name of the VPN&lt;/p&gt;&lt;p&gt;If there are error or warnings in the log try to understand the warnings/error and try to fix them&lt;/p&gt; </string>
     <string name="faq_howto_title">Quick Start</string>
-    <string name="setting_loadtun_summary">Try to load the tun.ko kernel module before trying to connect. Needs rooted devices.</string>
-    <string name="setting_loadtun">Load tun module</string>
     <string name="importpkcs12fromconfig">Import PKCS12 from configuration into Android Keystore</string>
     <string name="getproxy_error">Error getting proxy settings: %s</string>
     <string name="using_proxy">Using proxy %1$s %2$s</string>
@@ -268,7 +264,7 @@
     <string name="rdn">RDN (common name)</string>
     <string name="rdn_prefix">RDN prefix</string>
     <string name="tls_remote_deprecated">tls-remote (DEPRECATED)</string>
-    <string name="help_translate">You can help translating by visiting https://crowdin.net/project/ics-openvpn/invite</string>
+    <string name="help_translate">You can help translating by visiting https://crowdin.net/project/ics-openvpn/</string>
     <string name="prompt">%1$s attempts to control %2$s</string>
     <string name="remote_warning">By proceeding, you are giving the application permission to completely control OpenVPN for Android and to intercept all network traffic. <b>Do NOT accept unless you trust the application.</b> Otherwise, you run the risk of having your data compromised by malicious software."</string>
     <string name="remote_trust">I trust this application.</string>
@@ -507,5 +503,10 @@
     <string name="missing_keychain_access">Access to Android keychain certificate is missing. Tap this notification to select/import a certificate</string>
     <string name="trusted_environment">In trusted environment:</string>
     <string name="unknown_but_secure">Unknown storage, but secure:</string>
+    <string name="dpc1protocol">Enable device posture protocol</string>
+    <string name="dpc1protocolsummary">Enables the dpc1 app custom control protocol to allow an OpenVPN service to perform device posture checks.</string>
+    <string name="local_network_permission">Local network permission</string>
+    <string name="local_network_permission_summary">Allows to connect to a VPN server on the local network.</string>
+    <string name="openvpn3_different_proxy">OpenVPN 3 C++ implementation does not support different proxy settings per remote</string>
 
 </resources>
